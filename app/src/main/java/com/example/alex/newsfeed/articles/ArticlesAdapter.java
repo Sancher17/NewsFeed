@@ -1,4 +1,4 @@
-package com.example.alex.newsfeed;
+package com.example.alex.newsfeed.articles;
 
 import android.support.annotation.NonNull;
 import android.support.v7.widget.CardView;
@@ -9,13 +9,15 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.example.alex.newsfeed.R;
+
 import java.util.ArrayList;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
 
-public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHolder> {
+public class ArticlesAdapter extends RecyclerView.Adapter<ArticlesAdapter.ViewHolder> {
 
     @BindView(R.id.name)
     TextView name;
@@ -23,11 +25,11 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHo
     @BindView(R.id.action)
     TextView action;
     
-    String TAG = "RecyclerAdapter";
+    String TAG = "ArticlesAdapter";
 
     private ArrayList<String> items = new ArrayList<>();
 
-    public RecyclerAdapter(ArrayList<String> list) {
+    public ArticlesAdapter(ArrayList<String> list) {
         items = list;
     }
 
@@ -42,14 +44,14 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHo
 
     @NonNull
     @Override
-    public RecyclerAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+    public ArticlesAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         CardView cv = (CardView) LayoutInflater.from(parent.getContext()).inflate
-                (R.layout.card_captioned_image, parent, false);
+                (R.layout.card_view, parent, false);
         return new ViewHolder(cv);
     }
 
     @Override
-    public void onBindViewHolder(@NonNull RecyclerAdapter.ViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull ArticlesAdapter.ViewHolder holder, int position) {
 
         CardView cardView = holder.cardView;
         ButterKnife.bind(this, cardView);
