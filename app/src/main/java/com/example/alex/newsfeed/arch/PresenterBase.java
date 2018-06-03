@@ -19,4 +19,20 @@ public abstract class PresenterBase<T extends MvpView >  implements  MvpPresente
         return view;
     }
 
+    public boolean isViewAttached() {
+        return view != null;
+    }
+
+
+    public void checkViewAttached() {
+        if (!isViewAttached()) throw new MvpViewNotAttachedException();
+    }
+
+    public static class MvpViewNotAttachedException extends RuntimeException {
+        public MvpViewNotAttachedException() {
+            super("Please call Presenter.attachView(MvpView) before" +
+                    " requesting data to the Presenter");
+        }
+    }
+
 }

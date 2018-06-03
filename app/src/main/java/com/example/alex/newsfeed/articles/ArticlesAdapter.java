@@ -27,10 +27,10 @@ public class ArticlesAdapter extends RecyclerView.Adapter<ArticlesAdapter.ViewHo
     
     String TAG = "ArticlesAdapter";
 
-    private ArrayList<String> items = new ArrayList<>();
+    public ArrayList<String> items = new ArrayList<>();
 
-    public ArticlesAdapter(ArrayList<String> list) {
-        items = list;
+    public ArticlesAdapter() {
+        initList();
     }
 
     static class ViewHolder extends RecyclerView.ViewHolder {
@@ -68,12 +68,18 @@ public class ArticlesAdapter extends RecyclerView.Adapter<ArticlesAdapter.ViewHo
             }
         });
 
-
     }
 
 
     @Override
     public int getItemCount() {
         return items.size();
+    }
+
+    public void initList() {
+        Log.d(TAG, "initList: ");
+        items.add("Alex");
+        items.add("Cool");
+        items.add("Boy");
     }
 }
