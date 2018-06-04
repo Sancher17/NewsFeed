@@ -36,7 +36,7 @@ class ArticlesModule {
     @Singleton
     @Provides
     ArticlesContract.Presenter provideArticlesPresenter(){
-        return new ArticlesPresenter(manager, provideIndiaApi());
+        return new ArticlesPresenter(manager);
     }
 
 

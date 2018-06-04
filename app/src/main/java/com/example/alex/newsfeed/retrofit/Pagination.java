@@ -3,7 +3,9 @@ package com.example.alex.newsfeed.retrofit;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
-public class Pagination {
+import io.realm.RealmObject;
+
+public class Pagination extends RealmObject {
 
     @SerializedName("TotalPages")
     @Expose

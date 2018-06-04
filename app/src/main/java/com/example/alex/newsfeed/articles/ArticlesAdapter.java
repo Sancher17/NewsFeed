@@ -11,6 +11,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.example.alex.newsfeed.R;
+import com.example.alex.newsfeed.retrofit.Example;
 import com.example.alex.newsfeed.retrofit.NewsItem;
 import com.example.alex.newsfeed.util.MessageEvent;
 
@@ -33,6 +34,9 @@ public class ArticlesAdapter extends RecyclerView.Adapter<ArticlesAdapter.ViewHo
     private String TAG = "ArticlesAdapter";
 
     private ArrayList<NewsItem> list = new ArrayList<>();
+
+    private Example example = Example.getInstance();
+
 
     static class ViewHolder extends RecyclerView.ViewHolder {
         private CardView cardView;
@@ -58,7 +62,7 @@ public class ArticlesAdapter extends RecyclerView.Adapter<ArticlesAdapter.ViewHo
         ButterKnife.bind(this, cardView);
 
         name.setText(list.get(position).getHeadLine());
-        date.setText(list.get(position).getDateLine());
+        date.setText(Example.getInstance().getNewsItem().get(position).getDateLine());
 
         // TODO: 29.05.2018 click - реакция
         cardView.setOnClickListener(new View.OnClickListener() {

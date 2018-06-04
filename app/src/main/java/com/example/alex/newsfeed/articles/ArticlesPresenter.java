@@ -28,19 +28,20 @@ public class ArticlesPresenter extends PresenterBase<ArticlesContract.View> impl
 
     private String TAG = "ArticlesPresenter";
 
-    private final IndiaApi mIndiaApi;
+//    private final IndiaApi mIndiaApi; deprecated
 
+    @Inject
+    IndiaApi mIndiaApi;
 
     @Inject
     ArticlesAdapter adapter;
 
-    List<NewsItem> listItems = new ArrayList<>();
+
 
 
     @Inject
-    public ArticlesPresenter(DataManager manager, IndiaApi indiaApi) {
+    public ArticlesPresenter(DataManager manager) {
         this.manager = manager;
-        mIndiaApi = indiaApi;
         AppInject.getComponent().inject(this);
     }
 
@@ -58,14 +59,15 @@ public class ArticlesPresenter extends PresenterBase<ArticlesContract.View> impl
     public void loadArticles() {
         checkViewAttached();
         RxUtil.dispose(mDisposable);
+        final List<NewsItem> listItems = new ArrayList<>();
         mIndiaApi.newsItem()
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new DisposableSingleObserver<Example>() {
                     @Override
                     public void onSuccess(Example newsItem) {
-                        // TODO: 03.06.2018 записал данные в адаптер - для теста , (по факту надо в БД)
                         listItems.addAll(newsItem.getNewsItem());
+                        Example.getInstance().setNewsItem(listItems);
                         adapter.setNewsItems((ArrayList<NewsItem>) listItems);
                         Log.d(TAG, "onSuccess: " + listItems.get(0).getHeadLine());
                         getView().updateView();
