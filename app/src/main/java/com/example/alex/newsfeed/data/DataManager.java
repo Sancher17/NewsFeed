@@ -29,7 +29,6 @@ public class DataManager {
 
     private String BASE_URL = "https://timesofindia.indiatimes.com/feeds/";
 
-    ArticlesAdapter adapter = new ArticlesAdapter();
 
     List<NewsItem> listItems = new ArrayList<>();
 

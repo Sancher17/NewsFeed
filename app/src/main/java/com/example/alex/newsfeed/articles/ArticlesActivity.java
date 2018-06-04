@@ -1,38 +1,32 @@
 package com.example.alex.newsfeed.articles;
 
+import android.content.Intent;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.widget.Toast;
 
-import com.example.alex.newsfeed.BuildConfig;
 import com.example.alex.newsfeed.R;
+import com.example.alex.newsfeed.articleDetail.ArticleDetail;
 import com.example.alex.newsfeed.dagger.AppInject;
-import com.example.alex.newsfeed.data.Articles;
-import com.example.alex.newsfeed.retrofit.Example;
-import com.example.alex.newsfeed.retrofit.IndiaApi;
 import com.example.alex.newsfeed.retrofit.NewsItem;
+import com.example.alex.newsfeed.util.MessageEvent;
 
-import java.util.ArrayList;
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
+
 import java.util.List;
 
 import javax.inject.Inject;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import okhttp3.OkHttpClient;
-import okhttp3.logging.HttpLoggingInterceptor;
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
-import retrofit2.Retrofit;
-import retrofit2.converter.gson.GsonConverterFactory;
 
-public class ArticlesActivity extends AppCompatActivity implements ArticlesContract.View {
-
+public class ArticlesActivity extends AppCompatActivity implements ArticlesContract.View{
+    private String TAG = "ArticlesActivity";
 
     @BindView(R.id.swiperefreshRecycler)
     SwipeRefreshLayout swipe;
@@ -49,6 +43,7 @@ public class ArticlesActivity extends AppCompatActivity implements ArticlesContr
     @Override
     protected void onStart() {
         super.onStart();
+        EventBus.getDefault().register(this);
     }
 
     @Override
@@ -69,25 +64,19 @@ public class ArticlesActivity extends AppCompatActivity implements ArticlesContr
                     @Override
                     public void onRefresh() {
                         Toast.makeText(ArticlesActivity.this, "onRefresh", Toast.LENGTH_SHORT).show();
+                        adapter.clearAdapter();
                         presenter.loadArticles();
-
                     }
                 }
         );
 
-
     }
 
-    void printAll() {
-//        for (NewsItem list: listItems) {
-//            Log.d(TAG, "items: " + list.getHeadLine());
-//        }
-//        for (int i = 0; i < 3; i++) {
-//            Log.d(TAG, "items: " + listItems.get(i).getStory());
-//        }
-
-//        adapter.items.add(listItems.get(1).getHeadLine());
-//        adapter.notifyDataSetChanged();
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onMessageEvent(MessageEvent event) {
+        Toast.makeText(this, "Position " + event.message, Toast.LENGTH_SHORT).show();
+        Intent intent = new Intent(this, ArticleDetail.class);
+        startActivity(intent);
     }
 
 
@@ -104,11 +93,22 @@ public class ArticlesActivity extends AppCompatActivity implements ArticlesContr
 
     @Override
     public void showError() {
-
+        Toast.makeText(this, "Ошибка загрузки", Toast.LENGTH_SHORT).show();
     }
 
     @Override
     public void hideProgressBar() {
         swipe.setRefreshing(false);
+    }
+
+    @Override
+    public void updateView() {
+        adapter.notifyDataSetChanged();
+    }
+
+    @Override
+    protected void onStop() {
+        EventBus.getDefault().unregister(this);
+        super.onStop();
     }
 }

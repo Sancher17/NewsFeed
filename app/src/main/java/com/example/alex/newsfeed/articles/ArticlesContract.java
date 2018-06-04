@@ -19,6 +19,8 @@ public interface ArticlesContract {
 
         void hideProgressBar();
 
+        void updateView();
+
     }
 
     interface Presenter extends MvpPresenter<View>{

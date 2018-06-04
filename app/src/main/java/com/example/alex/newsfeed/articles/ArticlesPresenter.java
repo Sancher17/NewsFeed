@@ -2,7 +2,6 @@ package com.example.alex.newsfeed.articles;
 
 import android.util.Log;
 
-import com.example.alex.newsfeed.BuildConfig;
 import com.example.alex.newsfeed.arch.PresenterBase;
 import com.example.alex.newsfeed.dagger.AppInject;
 import com.example.alex.newsfeed.data.DataManager;
@@ -16,16 +15,10 @@ import java.util.List;
 
 import javax.inject.Inject;
 
-import io.reactivex.Observer;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.observers.DisposableSingleObserver;
 import io.reactivex.schedulers.Schedulers;
-import okhttp3.OkHttpClient;
-import okhttp3.logging.HttpLoggingInterceptor;
-import retrofit2.Retrofit;
-import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
-import retrofit2.converter.gson.GsonConverterFactory;
 
 
 public class ArticlesPresenter extends PresenterBase<ArticlesContract.View> implements ArticlesContract.Presenter {
@@ -73,9 +66,9 @@ public class ArticlesPresenter extends PresenterBase<ArticlesContract.View> impl
                     public void onSuccess(Example newsItem) {
                         // TODO: 03.06.2018 записал данные в адаптер - для теста , (по факту надо в БД)
                         listItems.addAll(newsItem.getNewsItem());
-                        adapter.items.add(listItems.get(0).getHeadLine());
+                        adapter.setNewsItems((ArrayList<NewsItem>) listItems);
                         Log.d(TAG, "onSuccess: " + listItems.get(0).getHeadLine());
-                        adapter.notifyDataSetChanged();
+                        getView().updateView();
                         getView().hideProgressBar();
                     }
 

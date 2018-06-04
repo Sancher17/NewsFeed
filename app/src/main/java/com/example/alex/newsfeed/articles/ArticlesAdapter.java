@@ -1,5 +1,6 @@
 package com.example.alex.newsfeed.articles;
 
+import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
@@ -10,6 +11,10 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.example.alex.newsfeed.R;
+import com.example.alex.newsfeed.retrofit.NewsItem;
+import com.example.alex.newsfeed.util.MessageEvent;
+
+import org.greenrobot.eventbus.EventBus;
 
 import java.util.ArrayList;
 
@@ -19,19 +24,15 @@ import butterknife.ButterKnife;
 
 public class ArticlesAdapter extends RecyclerView.Adapter<ArticlesAdapter.ViewHolder> {
 
-    @BindView(R.id.name)
+    @BindView(R.id.head)
     TextView name;
 
-    @BindView(R.id.action)
-    TextView action;
+    @BindView(R.id.date)
+    TextView date;
     
-    String TAG = "ArticlesAdapter";
+    private String TAG = "ArticlesAdapter";
 
-    public ArrayList<String> items = new ArrayList<>();
-
-    public ArticlesAdapter() {
-        initList();
-    }
+    private ArrayList<NewsItem> list = new ArrayList<>();
 
     static class ViewHolder extends RecyclerView.ViewHolder {
         private CardView cardView;
@@ -51,20 +52,20 @@ public class ArticlesAdapter extends RecyclerView.Adapter<ArticlesAdapter.ViewHo
     }
 
     @Override
-    public void onBindViewHolder(@NonNull ArticlesAdapter.ViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull ArticlesAdapter.ViewHolder holder, final int position) {
 
         CardView cardView = holder.cardView;
         ButterKnife.bind(this, cardView);
 
-        name.setText(items.get(position));
-        action.setText("action");
-
+        name.setText(list.get(position).getHeadLine());
+        date.setText(list.get(position).getDateLine());
 
         // TODO: 29.05.2018 click - реакция
         cardView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Log.d(TAG, "onClick: ");
+                Log.d(TAG, "onClick: " + position);
+                EventBus.getDefault().post(new MessageEvent(position));
             }
         });
 
@@ -73,13 +74,19 @@ public class ArticlesAdapter extends RecyclerView.Adapter<ArticlesAdapter.ViewHo
 
     @Override
     public int getItemCount() {
-        return items.size();
+        return list.size();
     }
 
-    public void initList() {
-        Log.d(TAG, "initList: ");
-        items.add("Alex");
-        items.add("Cool");
-        items.add("Boy");
+    public void setNewsItems(ArrayList <NewsItem> list){
+        this.list = list;
     }
+
+    public void clearAdapter(){
+        list.clear();
+    }
+
+    public void setNewsItem(NewsItem item){
+        list.add(item);
+    }
+
 }

@@ -67,11 +67,11 @@
 //
 //    void printAll(){
 //        for (NewsItem list: listItems) {
-//            Log.d(TAG, "items: " + list.getHeadLine());
+//            Log.d(TAG, "list: " + list.getHeadLine());
 //        }
 //
 //        for (int i = 0; i < 3; i++) {
-//            Log.d(TAG, "items: " + listItems.get(i).getStory());
+//            Log.d(TAG, "list: " + listItems.get(i).getStory());
 //        }
 //    }
 //}
